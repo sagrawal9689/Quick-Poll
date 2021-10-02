@@ -15,7 +15,7 @@ const HomeScreen = () => {
       values.push({ value: null });
       setFields(values);
 
-      console.log(values)
+      // console.log(values)
     }
 
     function handleRemove(i) {
@@ -28,13 +28,17 @@ const HomeScreen = () => {
         setQuestion(e.target.value)
     }
 
+    function submitPoll(e) {
+        
+    }
+
     const [question, setQuestion]= useState(""); 
     const [fields, setFields] = useState([{ value: null }]);
 
     return (
         <>
         
-        <div style={{ textAlign: "center", fontSize: "57px" , color: "white"}} className="m-5">
+        <div style={{ textAlign: "center", fontSize: "57px" , color: "white"}} className="m-4">
           Quick Poll
         <div style={{ textAlign: "center", fontSize: "20px" }}>Create Polls Quickly.</div>
         </div>
@@ -43,7 +47,7 @@ const HomeScreen = () => {
         <Form className="formMain">
             <Form.Group>
               <Form.Label>Poll Question</Form.Label>
-              <Form.Control as="textarea" rows={3} value={question} onChange={handelQuestionChange}/>
+              <Form.Control as="textarea" rows={3} value={question} onChange={handelQuestionChange} placeholder="what is your favourite food?"/>
             </Form.Group>
             {fields.map((field, idx) => {
             return (
@@ -63,7 +67,9 @@ const HomeScreen = () => {
               </Form.Group>
             );
           })}
-          <Button type="button" onClick={() => handleAdd()} className="my-4">Add another Option</Button>
+          <Button type="button" onClick={() => handleAdd()} className="my-4 btn-lg">Add another Option</Button>
+          <hr></hr>
+          <Button className="btn-lg btn-info" onClick={submitPoll}>Create your Poll</Button>
         </Form>
 
         </main>
