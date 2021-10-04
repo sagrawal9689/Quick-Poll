@@ -9,8 +9,12 @@ const pollSchema = mongoose.Schema(
     },
     options:[{value:{
         type: String,
-        required: true
-    }}]
+        required: true},
+        count: {
+          type: Number,
+          default: 0
+        }
+    }]
   }
 )
 
