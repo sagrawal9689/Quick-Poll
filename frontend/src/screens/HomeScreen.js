@@ -1,8 +1,9 @@
 import React from 'react'
 import { useState } from 'react';
+import axios from 'axios';
 import { Button, Form } from 'react-bootstrap'
 
-const HomeScreen = () => {
+const HomeScreen = ({ history }) => {
 
     function handleChange(i, event) {
       const values = [...fields];
@@ -28,13 +29,24 @@ const HomeScreen = () => {
         setQuestion(e.target.value)
     }
 
-    function submitPoll(e) {
-        
-    }
-
+    
     const [question, setQuestion]= useState(""); 
     const [fields, setFields] = useState([{ value: null }]);
+    function submitPoll(e) {
+        try{
+          const createPoll=async ()=>{
+            const {data}= await axios.post('/api/poll',{ question, options: fields })
+            history.push(`/showResults/${data._id}`)
+          }
+          createPoll();
 
+        }
+        catch(e)
+        {
+          console.log(e);
+        }
+    }
+    
     return (
         <>
         
