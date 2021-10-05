@@ -36,7 +36,7 @@ const HomeScreen = ({ history }) => {
         try{
           const createPoll=async ()=>{
             const {data}= await axios.post('/api/poll',{ question, options: fields })
-            history.push(`/showResults/${data._id}`)
+            history.push(`/vote/${data._id}`)
           }
           createPoll();
 
