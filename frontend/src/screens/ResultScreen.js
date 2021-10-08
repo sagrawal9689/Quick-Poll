@@ -1,6 +1,6 @@
 import axios from 'axios'
 import React,{ useEffect, useState } from 'react'
-import { Container ,Spinner } from 'react-bootstrap'
+import { Card, Container ,ListGroup,Spinner } from 'react-bootstrap'
 import socket from '../socket'
 
 const ResultScreen = ({ match ,history}) => {
@@ -8,6 +8,7 @@ const ResultScreen = ({ match ,history}) => {
     const [ loading, setLoading ]= useState(true)
     const [ question, setQuestion ]= useState("")
     const [ options, setOptions ]= useState([])
+    const [ totalVotes, setTotalVotes ]= useState(0);
 
     useEffect(() => {
 
@@ -15,6 +16,7 @@ const ResultScreen = ({ match ,history}) => {
             const { data }= await axios.get(`/api/poll/${match.params.id}`);
             setQuestion(data.question);
             setOptions(data.options);
+            setTotalVotes(data.options.reduce((a, b) => ({count: a.count + b.count})).count);
             // console.log(data)
         }
 
@@ -41,21 +43,14 @@ const ResultScreen = ({ match ,history}) => {
                 // console.log(newOption)
                 return newOption
             })
+
+            setTotalVotes((prevCount)=>{
+                return prevCount+1;
+            })
         }
 
         socket.on('increaseCountDone', incrementCount)
-
-        // ( { pollId, optionId } )=>{
-            
-        //     const newOptions= [ ...options ]
-
-        //     const idx= newOptions.findIndex((ele)=>
-        //     {
-        //         console.log(ele._id,optionId)
-        //         return ele._id.equals(optionId)
-        //     } )
-        // })
-        
+        // eslint-disable-next-line
       }, [match.params.id]);
 
 
@@ -63,15 +58,40 @@ const ResultScreen = ({ match ,history}) => {
         loading ?(<Container style={{display: 'flex', justifyContent: 'center', marginTop: '50px'}}>
             <Spinner animation="border" style={{ width: '4rem', height: '4rem' }}/></Container>):(
         <div>
-            <Container style={{ height: '50vh',width: '60%' ,display: 'flex',  flexDirection: 'column', justifyContent:'center', alignItems:'center'}}>
-            <h2 className="my-3">{question}</h2>
-            <form style={{width: '100%', textAlign:'center'}}>
-                {
+            <Container style={{ height: '100%',display: 'flex',  flexDirection: 'column', justifyContent:'center', alignItems:'center'}} className='resultContainer'>
+            <h2 style={{ margin: '50px' }}>{question}</h2>
+            <div style={{ width: '100%', display: 'flex' , flexDirection: 'row'}}>
+
+            <div style={{width: '80%'}}>
+            {
                     options.map((opt)=>{
-                    return <div key={opt._id} style={{width: '100%'}} className="btn btn-primary btn-lg px-4 my-1">{`${opt.value} ${opt.count}`}</div>
+                    return <Card key={opt._id} style={{ width: '95%'}} className='my-2'>
+                              <Card.Body>
+                                <Card.Title style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                    <div>{opt.value}</div> 
+                                    <div className='badge rounded-pill bg-info'>{`${Math.floor((opt.count/totalVotes)*100)}%`}</div>
+                                </Card.Title>
+                                <Card.Text as="div">
+                                <div className="progress">
+                                  <div className="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style={{ width: `${(opt.count/totalVotes)*100}%`}} aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                                <div>{opt.count} votes</div>
+                                </Card.Text>
+                              </Card.Body>
+                            </Card>
                     })
-                }
-            </form>
+            }
+            </div>
+            <div style={{ width: '20%' }}>
+            <Card className='my-2'>
+              <ListGroup variant="flush">
+                <ListGroup.Item>Total Votes: {totalVotes}</ListGroup.Item>
+                <ListGroup.Item>Share</ListGroup.Item>
+                <ListGroup.Item></ListGroup.Item>
+              </ListGroup>
+            </Card>
+            </div>    
+            </div>
             </Container>
         </div>
         )

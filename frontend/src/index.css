@@ -2,8 +2,15 @@
   padding: 50px 200px;
 }
 
+.resultContainer {
+  width: 65%;
+}
+
 @media screen and (max-width: 480px) {
   .formMain {
     padding: 50px 50px;
+  }
+  .resultContainer {
+    width: 100%;
   }
 }
