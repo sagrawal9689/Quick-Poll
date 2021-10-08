@@ -61,7 +61,7 @@ const VotingScreen = ({ match ,history}) => {
                            <label style={{width: '70%'}} htmlFor={`${opt._id}`}><div style={{width: '100%'}} className="btn btn-primary btn-lg px-4 my-1">{`${opt.value}`}</div></label></div>
                     })
                 }
-                <Button className="btn-secondary my-2" type="submit">Submit</Button>
+                <Button className="btn-secondary my-2" type="submit">Submit Your Vote</Button>
             </form>
             { selectedOption }
             </Container>
