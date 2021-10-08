@@ -23,7 +23,7 @@ const ResultScreen = ({ match ,history}) => {
         fetchData();
         setLoading(false);
 
-        console.log(options)
+        // console.log(options)
         
         socket.emit('joinRoom', match.params.id);
 
@@ -50,6 +50,10 @@ const ResultScreen = ({ match ,history}) => {
         }
 
         socket.on('increaseCountDone', incrementCount)
+        
+        return () => {
+            socket.off('increaseCountDone', incrementCount);
+        };
         // eslint-disable-next-line
       }, [match.params.id]);
 
