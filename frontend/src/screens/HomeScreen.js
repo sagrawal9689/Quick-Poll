@@ -1,7 +1,7 @@
 import React from 'react'
 import { useState } from 'react';
 import axios from 'axios';
-import { Button, Form } from 'react-bootstrap'
+import { Alert, Button, Form } from 'react-bootstrap'
 
 const HomeScreen = ({ history }) => {
 
@@ -32,19 +32,36 @@ const HomeScreen = ({ history }) => {
     
     const [question, setQuestion]= useState(""); 
     const [fields, setFields] = useState([{ value: null }]);
-    function submitPoll(e) {
-        try{
-          const createPoll=async ()=>{
-            const {data}= await axios.post('/api/poll',{ question, options: fields })
-            history.push(`/vote/${data._id}`)
-          }
-          createPoll();
+    const [ alert, setAlert ]= useState(null);
 
-        }
-        catch(e)
-        {
-          console.log(e);
-        }
+    function submitPoll(e) {
+  
+          const createPoll=async ()=>{
+
+            try{
+              const {data}= await axios.post('/api/poll',{ question, options: fields })
+              history.push(`/vote/${data._id}`)
+              
+            }
+            catch(e)
+            {
+              console.log(e)
+            }
+          }
+
+          if(!question || question.trim()==="")
+          {
+            setAlert('please provide a question');
+            return;
+          }
+
+          if(fields.length===0 || (fields.length===1 && fields[0].value===null))
+          {
+            setAlert('please provide an option');
+            return;
+          }
+
+          createPoll();
     }
     
     return (
@@ -52,7 +69,7 @@ const HomeScreen = ({ history }) => {
         
         <div style={{ textAlign: "center", fontSize: "57px" , color: "white"}} className="m-4">
           Quick Poll
-        <div style={{ textAlign: "center", fontSize: "20px" }}>Create Polls Quickly.</div>
+        <div style={{ textAlign: "center", fontSize: "20px" }}>Create realtime Polls Quickly.</div>
         </div>
 
         <main>
@@ -79,11 +96,15 @@ const HomeScreen = ({ history }) => {
               </Form.Group>
             );
           })}
+          {
+            alert && <Alert className='my-3' variant='warning'>
+            {alert}
+            </Alert>
+          }
           <Button type="button" onClick={() => handleAdd()} className="my-4 btn-lg">Add another Option</Button>
           <hr></hr>
           <Button className="btn-lg btn-info" onClick={submitPoll}>Create your Poll</Button>
         </Form>
-
         </main>
         </>
     )
