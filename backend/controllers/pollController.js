@@ -25,7 +25,7 @@ const getPoll= catchAsync(async(req,res,next)=>{
 
 const increaseCount= catchAsync(async(req,res,next)=>{
 
-    console.log('backend')
+    // console.log('backend')
       let { pollId, optionId }= req.body
 
       pollId= mongoose.Types.ObjectId(pollId)

@@ -63,7 +63,6 @@ const VotingScreen = ({ match ,history}) => {
                 }
                 <Button className="btn-secondary my-2" type="submit">Submit Your Vote</Button>
             </form>
-            { selectedOption }
             </Container>
         </div>
         )

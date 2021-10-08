@@ -6,8 +6,6 @@ import { Server } from 'socket.io'
 import connectDB from './config/db.js'
 import pollRoutes from './routes/pollRoutes.js'
 import globalErrorHandler from './controllers/errorController.js'
-import Poll from './models/pollModel.js'
-import mongoose from 'mongoose'
 
 dotenv.config({path: "./backend/config.env"})
 connectDB()
@@ -21,30 +19,30 @@ app.use(express.json())
 
 app.use('/api/poll',pollRoutes)
 
-app.use(globalErrorHandler)
 
 const PORT= process.env.PORT || 5000;
 
 io.on('connection', socket => {
   socket.on('joinRoom', (room) => {
-
-    console.log('joined room')
+    
+    // console.log('joined room')
     socket.join(room);
-    console.log('room',room)
-
+    // console.log('room',room)
+    
   });
   
-
+  
   socket.on('increaseCount',( { pollId , optionId } )=>{
     // console.log('count Increased backend',pollId)
-
+    
     socket.broadcast.to(pollId).emit('increaseCountDone', {
       pollId ,  optionId
     });
-
+    
   })
-
+  
 });
+app.use(globalErrorHandler)
 
 server.listen(
   PORT,
