@@ -40,7 +40,7 @@ const HomeScreen = ({ history }) => {
 
             try{
               const {data}= await axios.post('/api/poll',{ question, options: fields })
-              history.push(`/vote/${data._id}`)
+              history.push(`/info/${data._id}`)
               
             }
             catch(e)

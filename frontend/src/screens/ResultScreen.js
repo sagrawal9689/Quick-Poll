@@ -73,7 +73,7 @@ const ResultScreen = ({ match ,history}) => {
                               <Card.Body>
                                 <Card.Title style={{ display: 'flex', justifyContent: 'space-between' }}>
                                     <div>{opt.value}</div> 
-                                    <div className='badge rounded-pill bg-info'>{`${Math.floor((opt.count/totalVotes)*100)}%`}</div>
+                                    <div className='badge rounded-pill bg-info'>{totalVotes?`${Math.floor((opt.count/totalVotes)*100)}%`:'0'}</div>
                                 </Card.Title>
                                 <Card.Text as="div">
                                 <div className="progress">
